@@ -11,9 +11,9 @@ define(function(require, exports, module) {
   function SlideshowView() {
     View.apply(this, arguments);
 
-    var SlideView = new SlideView();
+    var slideView = new SlideView();
 
-    this.add(SlideView);
+    this.add(slideView);
   }
 
   SlideshowView.prototype = Object.create(View.prototype);
