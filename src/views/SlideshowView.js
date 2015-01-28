@@ -7,6 +7,7 @@ define(function(require, exports, module) {
   var Transform = require('famous/core/Transform');
   var StateModifier = require('famous/modifiers/StateModifier');
   var Lightbox = require('famous/views/Lightbox');
+  var Easing = require('famous/transitions/Easing');
 
   var SlideView = require('views/SlideView');
 
@@ -43,7 +44,26 @@ define(function(require, exports, module) {
   SlideshowView.DEFAULT_OPTIONS = {
     size: [450, 500],
     data: undefined,
-    lightboxOpts: {}
+    lightboxOpts: {
+      //using easing
+      inTransform: Transform.translate(300, 0, 0),
+      outTransform: Transform.translate(-500, 0, 0),
+      inTransition: { duration: 500, curve: Easing.outBack},
+      outTransition: { duration: 350, curve: Easing.inQuad}
+      // default transition curve
+      // inTransform: Transform.scale(0.001, 0.001, 0.001),
+      // inOpacity: 0,
+      // inOrigin: [0.5, 0.5],
+      // showTransform: Transform.identity,
+      // showOpacity: 1,
+      // showOrigin: [0.5, 0.5],
+      // outTransform: Transform.scale(0.001, 0.001, 0.001),
+      // outOpacity: 0,
+      // outOrigin: [0.5, 0.5],
+      // inTransition: true,
+      // outTransition: true,
+      // overlap: false
+    }
   };
 
   function _createLightbox(){
