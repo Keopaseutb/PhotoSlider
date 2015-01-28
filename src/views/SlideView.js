@@ -6,6 +6,9 @@ define(function(require, exports, module) {
   var Surface = require('famous/core/Surface');
   var Transform = require('famous/core/Transform');
   var StateModifier = require('famous/modifiers/StateModifier');
+  var ImageSurface = require('famous/surfaces/ImageSurface');
+
+  var SlideData = require('data/SlideData');
 
 
   function SlideView() {
@@ -19,6 +22,7 @@ define(function(require, exports, module) {
 
     _createBackground.call(this);
     _createFilm.call(this);
+    _createPhoto.call(this);
 
   }
 
@@ -27,7 +31,9 @@ define(function(require, exports, module) {
 
   SlideView.DEFAULT_OPTIONS = {
     size: [400, 450],
-    filmBorder: 15
+    filmBorder: 15,
+    photoBorder: 3,
+    photoUrl: SlideData.defaultImage
   };
 
   function _createBackground(){
@@ -61,6 +67,26 @@ define(function(require, exports, module) {
     });
 
     this.mainNode.add(filmModifier).add(film);
+  }
+
+  function _createPhoto(){
+    var photoSize = this.options.filmSize - 2 * this.options.photoBorder;
+
+    var photo = new ImageSurface({
+      size: [photoSize, photoSize],
+      content: this.options.photoUrl,
+      properties: {
+        zIndex: 2
+      }
+    });
+
+    this.photoModifier = new StateModifier({
+      origin: [0.5, 0],
+      align: [0.5, 0],
+      transform: Transform.translate(0, this.options.filmBorder + this.options.photoBorder, 2)
+    });
+
+    this.mainNode.add(this.photoModifier).add(photo);
   }
 
   module.exports = SlideView;
