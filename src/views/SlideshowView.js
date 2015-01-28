@@ -31,11 +31,18 @@ define(function(require, exports, module) {
   SlideshowView.prototype.constructor = SlideshowView;
 
   SlideshowView.prototype.showCurrentSlide = function(){
+    this.ready = false;
+
     var slide = this.slides[this.currentIndex];
-    this.lightbox.show(slide);
+    this.lightbox.show(slide, function(){
+      this.ready = true;
+      slide.fadeIn();
+    }.bind(this));
   };
 
   SlideshowView.prototype.showNextSlide = function(){
+    if (!this.ready) return;
+
     this.currentIndex++;
     if(this.currentIndex === this.slides.length) this.currentIndex = 0;
     this.showCurrentSlide();
@@ -46,23 +53,34 @@ define(function(require, exports, module) {
     data: undefined,
     lightboxOpts: {
       //using easing
-      inTransform: Transform.translate(300, 0, 0),
-      outTransform: Transform.translate(-500, 0, 0),
-      inTransition: { duration: 500, curve: Easing.outBack},
-      outTransition: { duration: 350, curve: Easing.inQuad}
-      // default transition curve
-      // inTransform: Transform.scale(0.001, 0.001, 0.001),
-      // inOpacity: 0,
-      // inOrigin: [0.5, 0.5],
-      // showTransform: Transform.identity,
-      // showOpacity: 1,
-      // showOrigin: [0.5, 0.5],
-      // outTransform: Transform.scale(0.001, 0.001, 0.001),
-      // outOpacity: 0,
-      // outOrigin: [0.5, 0.5],
-      // inTransition: true,
-      // outTransition: true,
-      // overlap: false
+      // inTransform: Transform.translate(300, 0, 0),
+      // outTransform: Transform.translate(-500, 0, 0),
+      // inTransition: { duration: 500, curve: Easing.outBack},
+      // outTransition: { duration: 350, curve: Easing.inQuad}
+      //final animation
+      inOpacity: 1,
+      outOpacity: 0,
+      inOrigin:[0, 0],
+      outOrigin: [0, 0],
+      showOrigin: [0,0],
+      inTransform: Transform.thenMove(Transform.rotateX(0.9), [0, -300, -300]),
+      outTransform: Transform.thenMove(Transform.rotateZ(0.7), [0, window.innerHeight, -1000]),
+      inTransition: {duration: 650, curve: 'easeOut'},
+      outTransition: { duration: 500, curve: Easing.inCubic}
+      // 3d transition
+      //bug is in the positioning/animation of the 3d translation
+
+      // inTransform: Transform.rotateY(0.5),
+      // inOpacity: 1,
+      // inOrigin: [0, 0],
+      // showOrigin: [0, 0],
+      // outTransform: Transform.rotateY(-Math.PI/2),
+      // outOpacity: 1,
+      // outOrigin: [0, 0],
+      // inTransition: { duration: 500, curve: 'linear'},
+      // outTransition: { duration:700, curve: 'linear'},
+      // overlap: true
+
     }
   };
 
