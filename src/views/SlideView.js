@@ -19,6 +19,8 @@ define(function(require, exports, module) {
     View.apply(this, arguments);
 
     this.rootModifier = new StateModifier({
+        align: [0.5, 0],
+        origin: [0.5, 0],
         size: this.options.size
     });
 
